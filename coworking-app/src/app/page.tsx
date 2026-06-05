@@ -1,65 +1,78 @@
-import Image from "next/image";
+"use client"
 
-export default function Home() {
+import React, { useState } from "react"
+import { BarChart3, Calculator, Home, LineChart, Moon, Sun, Table2, Lightbulb } from "lucide-react"
+import { useTheme } from "next-themes"
+
+export default function Dashboard() {
+  const [activeTab, setActiveTab] = useState("descriptive")
+  const { setTheme, theme } = useTheme()
+
+  const navItems = [
+    { id: "descriptive", label: "Descritiva", icon: Table2 },
+    { id: "exploratory", label: "Gráficos", icon: BarChart3 },
+    { id: "correlation", label: "Correlação", icon: LineChart },
+    { id: "simple", label: "Regressão Simples", icon: Calculator },
+    { id: "multiple", label: "Regressão Múltipla", icon: Calculator },
+    { id: "simulation", label: "Simulação", icon: Home },
+    { id: "qa", label: "Respostas Gerenciais", icon: Lightbulb },
+  ]
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="flex h-screen w-full bg-background text-foreground transition-colors duration-300">
+      {/* Sidebar */}
+      <aside className="w-64 border-r border-border bg-card flex flex-col transition-colors duration-300">
+        <div className="p-6 border-b border-border">
+          <h1 className="text-lg font-light tracking-widest uppercase">Espaço Livre</h1>
+          <p className="text-xs text-muted-foreground font-light mt-1">Análise de Regressão</p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+        <nav className="flex-1 p-4 space-y-1">
+          {navItems.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => setActiveTab(item.id)}
+              className={`flex items-center w-full gap-3 px-4 py-3 text-sm font-light transition-all border rounded-md ${
+                activeTab === item.id
+                  ? "bg-foreground text-background border-foreground"
+                  : "bg-transparent border-transparent hover:border-border hover:bg-accent"
+              }`}
+            >
+              <item.icon className="w-4 h-4 stroke-[1.25]" />
+              {item.label}
+            </button>
+          ))}
+        </nav>
+        <div className="p-4 border-t border-border">
+          <button
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            className="flex items-center w-full gap-3 px-4 py-3 text-sm font-light transition-all border border-transparent rounded-md hover:border-border hover:bg-accent"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <Sun className="w-4 h-4 stroke-[1.25] hidden dark:block" />
+            <Moon className="w-4 h-4 stroke-[1.25] block dark:hidden" />
+            <span className="hidden dark:inline">Modo Claro</span>
+            <span className="inline dark:hidden">Modo Escuro</span>
+          </button>
+        </div>
+      </aside>
+
+      {/* Main Content */}
+      <main className="flex-1 overflow-auto p-10 bg-background transition-colors duration-300">
+        <header className="mb-8">
+          <h2 className="text-3xl font-light tracking-wide text-foreground">
+            {navItems.find((n) => n.id === activeTab)?.label}
+          </h2>
+          <hr className="mt-6 border-t border-border" />
+        </header>
+
+        <div className="border border-border rounded-xl p-8 bg-card font-light shadow-sm">
+          {/* Content Placeholder */}
+          <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
+            <Calculator className="w-12 h-12 stroke-[1] mb-4 opacity-50" />
+            <p className="text-lg font-light">Módulo de {navItems.find((n) => n.id === activeTab)?.label}</p>
+            <p className="text-sm mt-2 opacity-70">Os gráficos e cálculos serão integrados aqui em breve.</p>
+          </div>
         </div>
       </main>
     </div>
-  );
+  )
 }
