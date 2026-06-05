@@ -3,6 +3,13 @@
 import React, { useState } from "react"
 import { BarChart3, Calculator, Home, LineChart, Moon, Sun, Table2, Lightbulb } from "lucide-react"
 import { useTheme } from "next-themes"
+import { DescriptiveStats } from "@/components/DescriptiveStats"
+import { CorrelationMatrix } from "@/components/CorrelationMatrix"
+import { InterpretativeQA } from "@/components/InterpretativeQA"
+import { ExploratoryCharts } from "@/components/ExploratoryCharts"
+import { SimpleRegression } from "@/components/SimpleRegression"
+import { MultipleRegression } from "@/components/MultipleRegression"
+import { Simulation } from "@/components/Simulation"
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("descriptive")
@@ -65,12 +72,22 @@ export default function Dashboard() {
         </header>
 
         <div className="border border-border rounded-xl p-8 bg-card font-light shadow-sm">
-          {/* Content Placeholder */}
-          <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
-            <Calculator className="w-12 h-12 stroke-[1] mb-4 opacity-50" />
-            <p className="text-lg font-light">Módulo de {navItems.find((n) => n.id === activeTab)?.label}</p>
-            <p className="text-sm mt-2 opacity-70">Os gráficos e cálculos serão integrados aqui em breve.</p>
-          </div>
+          {activeTab === "descriptive" && <DescriptiveStats />}
+          {activeTab === "correlation" && <CorrelationMatrix />}
+          {activeTab === "exploratory" && <ExploratoryCharts />}
+          {activeTab === "simple" && <SimpleRegression />}
+          {activeTab === "multiple" && <MultipleRegression />}
+          {activeTab === "simulation" && <Simulation />}
+          {activeTab === "qa" && <InterpretativeQA />}
+          
+          {/* Content Placeholder for others */}
+          {!["descriptive", "correlation", "qa", "exploratory", "simple", "multiple", "simulation"].includes(activeTab) && (
+            <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
+              <Calculator className="w-12 h-12 stroke-[1] mb-4 opacity-50" />
+              <p className="text-lg font-light">Módulo de {navItems.find((n) => n.id === activeTab)?.label}</p>
+              <p className="text-sm mt-2 opacity-70">Os gráficos e cálculos serão integrados aqui em breve.</p>
+            </div>
+          )}
         </div>
       </main>
     </div>
